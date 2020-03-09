@@ -3,7 +3,7 @@ package cz.cvut.kbss.nlp.gate;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public class Vocabulary {
+public class Reliability {
 
     public static String ns = "http://onto.fel.cvut.cz/ontology/reliability/";
 
