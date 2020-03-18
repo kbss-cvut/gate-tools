@@ -2,6 +2,10 @@ package cz.cvut.kbss.nlp.cli;
 
 
 import cz.cvut.kbss.nlp.cli.util.CmdLineUtils;
+import cz.cvut.kbss.nlp.gate.ExtractAnnotations;
+import gate.*;
+import gate.annotation.AnnotationSetImpl;
+import gate.creole.brat.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.kohsuke.args4j.CmdLineParser;
@@ -9,22 +13,23 @@ import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import static java.lang.System.out;
 
 
 /**
  * Other files are not required as they are inferred from input text file name.
  */
 public class Brat2GateCLI {
-
-    // cat input-data.rdf | sem-pipes execute --instance "<http://url>"
-    //                   --config-file "$PATH/config.ttl"
-    //                   --input-binding-file "$PATH/input-binding.ttl" --output-binding-file "$PATH/output-binding.ttl"
-    //                   --input-file --output-file
-    // > output.data.rdf
 
     private static final Logger LOG = LoggerFactory.getLogger(Brat2GateCLI.class);
 
@@ -44,7 +49,7 @@ public class Brat2GateCLI {
     private Path outputInstanceDataFile;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         Brat2GateCLI asArgs = new Brat2GateCLI();
 
@@ -93,27 +98,18 @@ public class Brat2GateCLI {
                     resolveSibling(fileId + ".ttl");
             LOG.debug("Using inferred output instance data file {}.", asArgs.outputInstanceDataFile);
         }
-//        if (asArgs.isInputDataFromStdIn) {
-//            LOG.info("Loading input data from std-in ...");
-//            inputDataModel.read(System.in, null, FileUtils.langTurtle);
-//        }
-//
-//        LOG.info("Processing successfully finished.");
-//       // outputExecutionContext.getDefaultModel().write(System.out);
-//
-//
-//        // return output data
-//        if (asArgs.outputRdfFile != null) {
-//            outputExecutionContext.getDefaultModel().write(new FileOutputStream(asArgs.outputRdfFile), FileUtils.langTurtle);
-//        } else {
-//            outputExecutionContext.getDefaultModel().write(System.out, FileUtils.langTurtle);
-//        }
-//
-//        return;
+
+        Gate.init();
+        new BratDocumentFormat().init();
+        FeatureMap params = Factory.newFeatureMap();
+        params.put(Document.DOCUMENT_URL_PARAMETER_NAME, asArgs.inputTextFile.toUri().toURL());
+        params.put(Document.DOCUMENT_ENCODING_PARAMETER_NAME, "UTF-8");
+        params.put(Document.DOCUMENT_MIME_TYPE_PARAMETER_NAME, "text/x-brat");
+        Document doc = (Document)Factory.createResource("gate.corpora.DocumentImpl", params);
+        try (PrintStream ps = new PrintStream(new FileOutputStream(asArgs.outputGateDocumentFile.toFile()))) {
+            ps.println(doc.toXml());
+            ps.flush();
+        }
     }
-
-
-
-
 
 }
