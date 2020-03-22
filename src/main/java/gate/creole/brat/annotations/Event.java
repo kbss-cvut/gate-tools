@@ -9,39 +9,50 @@ import java.io.IOException;
 
 public class Event extends BratAnnotation {
 
-  private String[] roles, ids;
+    private String[] roles, ids;
 
-  protected Event(String... data) {
-    super(data[0]);
+    protected Event(String... data) {
+        super(data[0]);
 
-    String parts[] = data[1].split("[\\s:]+");
+        String parts[] = data[1].split("[\\s:]+");
 
-    type = parts[0];
-    target = parts[1];
+        type = parts[0];
+        target = parts[1];
 
-    roles = new String[(parts.length / 2) - 1];
-    ids = new String[roles.length];
+        roles = new String[(parts.length / 2) - 1];
+        ids = new String[roles.length];
 
-    for(int i = 0; i < roles.length; ++i) {
-      roles[i] = parts[(i * 2) + 2];
-      ids[i] = parts[(i * 2) + 3];
+        for (int i = 0; i < roles.length; ++i) {
+            roles[i] = parts[(i * 2) + 2];
+            ids[i] = parts[(i * 2) + 3];
+        }
     }
-  }
-  
-  public String getArgumentLabel(int i) {
-    return roles[i];
-  }
-  
-  public String getArgumentID(int i) {
-    return ids[i];
-  }
-  
-  public int getArgumentCount() {
-    return ids.length;
-  }
 
-  @Override
-  public void toJSON(JsonGenerator out) throws JsonGenerationException, IOException {
+    public static void main(String args[]) throws Exception {
+        JsonFactory jsonF = new JsonFactory();
+        JsonGenerator jsonG = jsonF.createGenerator(System.out);
+        String example = "E1\tMERGE-ORG:T2 Org1:T1 Org2:T3";
+        BratAnnotation bound = BratAnnotation.parse(example);
+        System.out.println(example);
+        System.out.println(bound);
+        bound.toJSON(jsonG);
+        jsonG.flush();
+    }
+
+    public String getArgumentLabel(int i) {
+        return roles[i];
+    }
+
+    public String getArgumentID(int i) {
+        return ids[i];
+    }
+
+    public int getArgumentCount() {
+        return ids.length;
+    }
+
+    @Override
+    public void toJSON(JsonGenerator out) throws JsonGenerationException, IOException {
 
     /*StringBuilder builder = new StringBuilder();
 
@@ -63,49 +74,38 @@ public class Event extends BratAnnotation {
     builder.append(" ] ]");
 
     return builder.toString();*/
-    
-    out.writeStartArray();
-    out.writeString(id);
-    out.writeString(target);
-    out.writeStartArray();
-    for (int i = 0 ; i < roles.length ; ++i) {
-      out.writeStartArray();
-      out.writeString(roles[i]);
-      out.writeString(ids[i]);
-      out.writeEndArray();
-    }
-    out.writeEndArray();
-    out.writeEndArray();
-  }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-
-    builder.append(id);
-    builder.append("\t");
-    builder.append(type);
-    builder.append(":");
-    builder.append(target);
-
-    for(int i = 0; i < roles.length; ++i) {
-      builder.append(" ");
-      builder.append(roles[i]);
-      builder.append(":");
-      builder.append(ids[i]);
+        out.writeStartArray();
+        out.writeString(id);
+        out.writeString(target);
+        out.writeStartArray();
+        for (int i = 0; i < roles.length; ++i) {
+            out.writeStartArray();
+            out.writeString(roles[i]);
+            out.writeString(ids[i]);
+            out.writeEndArray();
+        }
+        out.writeEndArray();
+        out.writeEndArray();
     }
 
-    return builder.toString();
-  }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
 
-  public static void main(String args[]) throws Exception {
-    JsonFactory jsonF = new JsonFactory();
-    JsonGenerator jsonG = jsonF.createGenerator(System.out);
-    String example = "E1\tMERGE-ORG:T2 Org1:T1 Org2:T3";
-    BratAnnotation bound = BratAnnotation.parse(example);
-    System.out.println(example);
-    System.out.println(bound);
-    bound.toJSON(jsonG);
-    jsonG.flush();
-  }
+        builder.append(id);
+        builder.append("\t");
+        builder.append(type);
+        builder.append(":");
+        builder.append(target);
+
+        for (int i = 0; i < roles.length; ++i) {
+            builder.append(" ");
+            builder.append(roles[i]);
+            builder.append(":");
+            builder.append(ids[i]);
+        }
+
+        return builder.toString();
+    }
 }

@@ -75,10 +75,10 @@ public class Brat2OntoConfig {
     }
 
     public String getBratRelativeDataHome() {
-         if (bratHome == null) {
-             return null;
-         }
-         return getRealPath(bratHome).relativize(getRealPath(bratTextFilePath.resolveSibling("."))).toString();
+        if (bratHome == null) {
+            return null;
+        }
+        return getRealPath(bratHome).relativize(getRealPath(bratTextFilePath.resolveSibling("."))).toString();
     }
 
     public String getBratDataUrl() {

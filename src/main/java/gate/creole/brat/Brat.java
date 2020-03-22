@@ -4,23 +4,29 @@ import gate.relations.Relation;
 
 public class Brat {
 
-  /** RELATION TYPES **/
+    /**
+     * RELATION TYPES
+     **/
 
-  public static final String EVENT = "event";
+    public static final String EVENT = "event";
 
-  public static final String RELATION = "relation";
+    public static final String RELATION = "relation";
 
-  public static final String EQUIVALENCE = Relation.COREF;
+    public static final String EQUIVALENCE = Relation.COREF;
 
-  /** RELATION LABELS **/
+    /**
+     * RELATION LABELS
+     **/
 
-  public static final String TYPE = "type";
+    public static final String TYPE = "type";
 
-  public static final String ARGUMENT_LABELS = "roleLabels";
+    public static final String ARGUMENT_LABELS = "roleLabels";
 
-  /** FEATURE TYPES **/
+    /**
+     * FEATURE TYPES
+     **/
 
-  public static final String NOTES = "notes";
+    public static final String NOTES = "notes";
 
-  public static final String NORMALIZATIONS = "normalizations";
+    public static final String NORMALIZATIONS = "normalizations";
 }

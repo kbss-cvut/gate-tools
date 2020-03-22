@@ -8,80 +8,80 @@ import java.io.IOException;
 
 public class Normalization extends BratAnnotation {
 
-  private String rid, eid;
+    private String rid, eid;
 
-  private String note;
+    private String note;
 
-  protected Normalization(String... data) throws IllegalArgumentException {
-    super(data[0]);
+    protected Normalization(String... data) throws IllegalArgumentException {
+        super(data[0]);
 
-    String parts[] = data[1].split("[\\s:]+", 4);
+        String parts[] = data[1].split("[\\s:]+", 4);
 
-    if(!parts[0].equals("Reference"))
-      throw new IllegalArgumentException("Unknown normalization type: " +
-        parts[0]);
+        if (!parts[0].equals("Reference"))
+            throw new IllegalArgumentException("Unknown normalization type: " +
+                    parts[0]);
 
-    type = "Reference";
-    
-    target = parts[1];
-    rid = parts[2];
-    eid = parts[3];
+        type = "Reference";
 
-    note = data[2];
-  }
-  
-  public String getRID() {
-    return rid;
-  }
-  
-  public String getEID() {
-    return eid;
-  }
-  
-  public String getText() {
-    return note;
-  }
-  
-  @Override
-  public void toJSON(JsonGenerator out) throws JsonGenerationException, IOException {
+        target = parts[1];
+        rid = parts[2];
+        eid = parts[3];
 
-    // ["N7", "Reference", "T2", "homologene", "4504", "trkB"]
-    
-    out.writeStartArray();
-    out.writeString(id);
-    out.writeString("Reference");
-    out.writeString(target);
-    out.writeString(rid);
-    out.writeString(eid);
-    out.writeString(note);
-    out.writeEndArray();
-  }
+        note = data[2];
+    }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
+    public static void main(String args[]) throws Exception {
+        JsonFactory jsonF = new JsonFactory();
+        JsonGenerator jsonG = jsonF.createGenerator(System.out);
+        String example = "N1\tReference T1 Wikipedia:534366\tBarack Obama";
+        BratAnnotation bound = BratAnnotation.parse(example);
+        System.out.println(example);
+        System.out.println(bound);
+        bound.toJSON(jsonG);
+        jsonG.flush();
+    }
 
-    builder.append(id);
-    builder.append("\tReference ");
-    builder.append(target);
-    builder.append(" ");
-    builder.append(rid);
-    builder.append(":");
-    builder.append(eid);
-    builder.append("\t");
-    builder.append(note);
+    public String getRID() {
+        return rid;
+    }
 
-    return builder.toString();
-  }
+    public String getEID() {
+        return eid;
+    }
 
-  public static void main(String args[]) throws Exception {
-    JsonFactory jsonF = new JsonFactory();
-    JsonGenerator jsonG = jsonF.createGenerator(System.out);
-    String example = "N1\tReference T1 Wikipedia:534366\tBarack Obama";
-    BratAnnotation bound = BratAnnotation.parse(example);
-    System.out.println(example);
-    System.out.println(bound);
-    bound.toJSON(jsonG);
-    jsonG.flush();
-  }
+    public String getText() {
+        return note;
+    }
+
+    @Override
+    public void toJSON(JsonGenerator out) throws JsonGenerationException, IOException {
+
+        // ["N7", "Reference", "T2", "homologene", "4504", "trkB"]
+
+        out.writeStartArray();
+        out.writeString(id);
+        out.writeString("Reference");
+        out.writeString(target);
+        out.writeString(rid);
+        out.writeString(eid);
+        out.writeString(note);
+        out.writeEndArray();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(id);
+        builder.append("\tReference ");
+        builder.append(target);
+        builder.append(" ");
+        builder.append(rid);
+        builder.append(":");
+        builder.append(eid);
+        builder.append("\t");
+        builder.append(note);
+
+        return builder.toString();
+    }
 }
