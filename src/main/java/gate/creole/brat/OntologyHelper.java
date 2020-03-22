@@ -81,7 +81,7 @@ public class OntologyHelper {
     public Individual createIndividual(TextBound textBound) {
         String iri = getOntologyResource(schemaOntology).toString() +
                 LOCAL_NAME_DELIMITER +
-                textBound.getText() + "-" + getTypeRelatedLocalAnnotationId(textBound);
+                getNormalizedName(textBound.getText()) + "-" + getTypeRelatedLocalAnnotationId(textBound);
 
         Individual individual = dataOntology.createIndividual(
                 iri,
@@ -237,6 +237,10 @@ public class OntologyHelper {
 
     private String getTypeRelatedLocalAnnotationId(BratAnnotation annotation) {
         return annotation.getID().substring(1);
+    }
+
+    private String getNormalizedName(String name) {
+        return name.replaceAll("[ \\[\\]{}()_:\\/\\\\;.<>]", "-");
     }
 }
 
