@@ -1,8 +1,8 @@
 package gate.creole.brat;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class Brat2OntoConfig {
 
@@ -75,18 +75,26 @@ public class Brat2OntoConfig {
     }
 
     public String getBratRelativeDataHome() {
-        return bratHome.resolve(bratTextFilePath.resolve(".")).toString();
+         return getRealPath(bratHome).relativize(getRealPath(bratTextFilePath.resolveSibling("."))).toString();
     }
 
     public String getBratDataUrl() {
-        return bratServerUrl + "/#/" + getBratRelativeDataHome() + getBratDataName();
+        return bratServerUrl + "/#/" + getBratRelativeDataHome() + "/" + getBratDataName();
     }
 
     public String getBratDataUrl(String focusedBratEntityId) {
         return getBratDataUrl() + "?focus=" + focusedBratEntityId;
     }
 
+    private Path getRealPath(Path path) {
+        try {
+            return path.toRealPath();
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to infer real path from path " + path + ".");
+        }
+    }
+
     private String removeTxtExtension(String txtFilePath) {
-        return txtFilePath.replace("\\.txt$", "");
+        return txtFilePath.replaceFirst("\\.txt$", "");
     }
 }

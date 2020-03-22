@@ -6,9 +6,9 @@ import cz.cvut.kbss.nlp.Vocabulary;
 import gate.creole.brat.annotations.BratAnnotation;
 import gate.creole.brat.annotations.Relation;
 import gate.creole.brat.annotations.TextBound;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
-import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
@@ -37,6 +37,31 @@ public class OntologyHelper {
         createDataOntologyModel();
     }
 
+    private static Resource getOntologyResource(Model model) {
+        ResIterator ontology = model.listSubjectsWithProperty(RDF.type, OWL2.Ontology);
+        if (!ontology.hasNext()) {
+            throw new OntologyRequirementsException("Missing triple pattern" + getTriplePattern(RDF.type, OWL2.Ontology));
+        }
+        return ontology.next();
+    }
+
+    private static String getTriplePattern(Property p, Resource o) {
+        return String.format("(?s, %s, %s)", p, o);
+    }
+
+    private static AnonId getStatementId(Statement statement) {
+        StringBuilder statementBuff = new StringBuilder();
+        statementBuff
+                .append("(")
+                .append("<").append(statement.getSubject().getURI()).append(">, ")
+                .append("<").append(statement.getPredicate().getURI()).append(">, ")
+                .append("<").append(statement.getObject().asResource().getURI()).append(">")
+                .append(")");
+        return AnonId.create(
+                DigestUtils.md5Hex(statementBuff.toString())
+        );
+    }
+
     /**
      * Returns Iri of previously created OWLNamedIndividual.
      *
@@ -54,7 +79,7 @@ public class OntologyHelper {
      * @return
      */
     public Individual createIndividual(TextBound textBound) {
-        String iri = getSchemaOntologyResource().toString() +
+        String iri = getOntologyResource(schemaOntology).toString() +
                 LOCAL_NAME_DELIMITER +
                 textBound.getText() + "-" + getTypeRelatedLocalAnnotationId(textBound);
 
@@ -63,6 +88,7 @@ public class OntologyHelper {
                 getClass(textBound)
         );
 
+        individual.addProperty(RDF.type, OWL2.NamedIndividual);
         individual.addLiteral(Vocabulary.isDenotedBy, textBound.getText());
         individual.addLiteral(RDFS.label, textBound.getText());
         individual.addLiteral(DCTerms.source, config.getBratDataUrl(textBound.getID()));
@@ -77,12 +103,13 @@ public class OntologyHelper {
      * @return Iri of an ontology
      */
     public String getSchemeOntologyIri() {
-        return getSchemaOntologyResource().getURI();
+        return getOntologyResource(schemaOntology).getURI();
     }
 
     /**
      * Returns resource that is used to express type of individual annotated in <code>textBound</code>.
      * It is assumed that such resource is represented as OWLClass within scheme ontology.
+     *
      * @param textBound An annotation representing individual of a type.
      * @return Resource representing the type.
      */
@@ -101,6 +128,10 @@ public class OntologyHelper {
         checkEntity(iri, OWL2.ObjectProperty);
 
         return dataOntology.createObjectProperty(iri);
+    }
+
+    public OntModel getDataOntology() {
+        return this.dataOntology;
     }
 
     private Resource getClass(String bratTextBoundType) {
@@ -127,23 +158,35 @@ public class OntologyHelper {
      * relation type determines predicate and second argument of relation determines object
      * of the triple representing the assertion. It is assumed that individuals representing first and second
      * arguments were already created.
-     *
      */
     public void createObjectPropertyAssertion(Relation relation) {
 
         String firstArgumentId = relation.getArgumentID(0);
         String secondArgumentId = relation.getArgumentID(1);
 
-        ReifiedStatement reifiedSt = dataOntology.createReifiedStatement(
-                dataOntology.createStatement(
-                        getIndividual(firstArgumentId),
-                        getObjectProperty(relation),
-                        getIndividual(secondArgumentId)
-                )
+        Statement st = dataOntology.createStatement(
+                getIndividual(firstArgumentId),
+                getObjectProperty(relation),
+                getIndividual(secondArgumentId)
         );
 
+        dataOntology.add(st);
+        Resource reifiedSt = addReifiedStatment(st);
         reifiedSt.addLiteral(DCTerms.source, config.getBratDataUrl(relation.getID()));
         bratAnnId2resource.put(relation.getID(), reifiedSt);
+    }
+
+    private Resource addReifiedStatment(Statement statement) {
+
+        Resource reifiedStatement = dataOntology.createResource(getStatementId(statement));
+
+        reifiedStatement
+                .addProperty(RDF.type, OWL2.Axiom)
+                .addProperty(OWL2.annotatedSource, statement.getSubject())
+                .addProperty(OWL2.annotatedProperty, statement.getPredicate())
+                .addProperty(OWL2.annotatedTarget, statement.getObject());
+
+        return reifiedStatement;
     }
 
     private String getFullURI(String bratEntityId) {
@@ -164,25 +207,21 @@ public class OntologyHelper {
     private void createDataOntologyModel() {
 
         dataOntology = ModelFactory.createOntologyModel();
-        Resource schemaOntologyRes = getSchemaOntologyResource();
-        Resource dataOntologyRes = dataOntology.createResource(schemaOntologyRes +
-                "/" + config.getBratRelativeDataHome() +
-                "/" + config.getBratDataName());
+        Resource schemaOntologyRes = getOntologyResource(schemaOntology);
+        Resource dataOntologyRes = dataOntology.createResource(
+                schemaOntologyRes +
+                        "/" + config.getBratRelativeDataHome() +
+                        "/" + config.getBratDataName()
+        );
         dataOntology.add(dataOntologyRes, RDF.type, OWL2.Ontology);
         dataOntology.add(dataOntologyRes, OWL2.imports, schemaOntologyRes);
         dataOntology.add(dataOntologyRes, DCTerms.source, config.getBratDataUrl());
-    }
 
-    private Resource getSchemaOntologyResource() {
-        ResIterator schemaIriIt = schemaOntology.listSubjectsWithProperty(RDF.type, OWL2.Ontology);
-        if (!schemaIriIt.hasNext()) {
-            throw new OntologyRequirementsException("Missing triple pattern" + getTriplePattern(RDF.type, OWL2.Ontology));
-        }
-        return schemaIriIt.next();
-    }
+        dataOntology.add(DCTerms.source, RDF.type, OWL2.AnnotationProperty);
 
-    private String getTriplePattern(Property p, Resource o) {
-        return String.format("(?s, %s, %s)", p, o);
+        dataOntology.setNsPrefixes(schemaOntology.getNsPrefixMap());
+        dataOntology.setNsPrefix("dcterms", DCTerms.NS);
+        dataOntology.setNsPrefix("", getOntologyResource(dataOntology).getURI() + LOCAL_NAME_DELIMITER);
     }
 
     private String getTypeRelatedLocalAnnotationId(BratAnnotation annotation) {

@@ -4,8 +4,10 @@ package cz.cvut.kbss.nlp.cli;
 import cz.cvut.kbss.nlp.cli.util.CmdLineUtils;
 import gate.*;
 import gate.creole.brat.*;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.FileUtils;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
@@ -15,8 +17,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 
 /**
@@ -75,7 +75,11 @@ public class Brat2GateCLI {
         CmdLineUtils.parseCommandLine(args, argParser);
 
         String output = String.join(" ", args);
-        LOG.info("Executing brat2gate cli ... " + output);
+        LOG.info(String.format(
+                "Executing cli: %s %s",
+                SubCommand.BRAT2GATE_MODULE.name.toString(),
+                output)
+        );
 
         // ----- load input model
         Model inputDataModel = ModelFactory.createDefaultModel();
@@ -93,11 +97,11 @@ public class Brat2GateCLI {
         }
 
         if (asArgs.inputSchemeOntologyFile != null) {
-            LOG.debug("Using provided ontology file {}.", asArgs.inputSchemeOntologyFile);
+            LOG.debug("Using provided input schema ontology file {}.", asArgs.inputSchemeOntologyFile);
         } else {
             asArgs.inputSchemeOntologyFile = asArgs.inputTextFile.
                     resolveSibling("ontology.ttl");
-            LOG.debug("Using inferred ontology file {}.", asArgs.inputSchemeOntologyFile);
+            LOG.debug("Using inferred input schema ontology file {}.", asArgs.inputSchemeOntologyFile);
         }
 
         if (asArgs.outputGateDocumentFile != null) {
@@ -123,8 +127,15 @@ public class Brat2GateCLI {
                 asArgs.checkOntologyEntities
         );
 
-        initializeDocumentFormats(brat2OntoConfig, getModel(asArgs.inputSchemeOntologyFile));
-        saveDocumentFormat(asArgs.inputTextFile, asArgs.outputGateDocumentFile, asArgs.mimeType);
+        OntologyHelper ontologyHelper = new OntologyHelper(
+                brat2OntoConfig, getModel(asArgs.inputSchemeOntologyFile)
+        );
+
+        initializeDocumentFormats(ontologyHelper);
+
+        saveOutputGateDocument(asArgs.inputTextFile, asArgs.outputGateDocumentFile, asArgs.mimeType);
+
+        saveInstanceDataFile(ontologyHelper.getDataOntology(), asArgs.outputInstanceDataFile);
     }
 
     private static Model getModel(Path configFile) throws IOException {
@@ -132,24 +143,29 @@ public class Brat2GateCLI {
         return ModelFactory.createDefaultModel().read(configFile.toUri().toURL().toString());
     }
 
-    private static void saveDocumentFormat(Path inputTextFile, Path outputGateDocumentFile, String mimeType) throws Exception {
+    private static void saveInstanceDataFile(OntModel dataOntology, Path outputInstanceDataFile) throws IOException {
+        LOG.info("Saving output ontology data file to {} ...", outputInstanceDataFile);
+        try (OutputStream outputInstanceDataStream = Files.newOutputStream(outputInstanceDataFile)) {
+            dataOntology.write(outputInstanceDataStream, FileUtils.langTurtle);
+        }
+    }
+
+    private static void saveOutputGateDocument(Path inputTextFile, Path outputGateDocumentFile, String mimeType) throws Exception {
         FeatureMap params = Factory.newFeatureMap();
         params.put(Document.DOCUMENT_URL_PARAMETER_NAME, inputTextFile.toUri().toURL());
         params.put(Document.DOCUMENT_ENCODING_PARAMETER_NAME, "UTF-8");
         params.put(Document.DOCUMENT_MIME_TYPE_PARAMETER_NAME, mimeType);
         Document doc = (Document)Factory.createResource("gate.corpora.DocumentImpl", params);
-        try (PrintStream ps = new PrintStream(new FileOutputStream(outputGateDocumentFile.toFile()))) {
+        LOG.info("Saving output gate document file to {} ...", outputGateDocumentFile);
+        try (PrintStream ps = new PrintStream(Files.newOutputStream(outputGateDocumentFile))) {
             ps.println(doc.toXml());
             ps.flush();
         }
     }
 
-    private static void initializeDocumentFormats(Brat2OntoConfig config, Model ontology) throws Exception {
+    private static void initializeDocumentFormats(OntologyHelper ontologyHelper) throws Exception {
         Gate.init();
         new BratDocumentFormat().init();
-        OntologyHelper ontologyHelper = new OntologyHelper(
-                config, ontology
-        );
         new OntoDocumentFormat(ontologyHelper).init();
     }
 
