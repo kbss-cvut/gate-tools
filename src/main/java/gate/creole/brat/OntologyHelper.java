@@ -91,7 +91,9 @@ public class OntologyHelper {
         individual.addProperty(RDF.type, OWL2.NamedIndividual);
         individual.addLiteral(Vocabulary.isDenotedBy, textBound.getText());
         individual.addLiteral(RDFS.label, textBound.getText());
-        individual.addLiteral(DCTerms.source, config.getBratDataUrl(textBound.getID()));
+        if (config.isReferenceBratServer()) {
+            individual.addLiteral(DCTerms.source, config.getBratDataUrl(textBound.getID()));
+        }
         bratAnnId2resource.put(textBound.getID(), individual);
 
         return individual;
@@ -171,9 +173,11 @@ public class OntologyHelper {
         );
 
         dataOntology.add(st);
-        Resource reifiedSt = addReifiedStatment(st);
-        reifiedSt.addLiteral(DCTerms.source, config.getBratDataUrl(relation.getID()));
-        bratAnnId2resource.put(relation.getID(), reifiedSt);
+        if (config.isReferenceBratServer()) {
+            Resource reifiedSt = addReifiedStatment(st);
+            reifiedSt.addLiteral(DCTerms.source, config.getBratDataUrl(relation.getID()));
+            bratAnnId2resource.put(relation.getID(), reifiedSt);
+        }
     }
 
     private Resource addReifiedStatment(Statement statement) {
@@ -208,23 +212,31 @@ public class OntologyHelper {
 
         dataOntology = ModelFactory.createOntologyModel();
         Resource schemaOntologyRes = getOntologyResource(schemaOntology);
-        Resource dataOntologyRes = dataOntology.createResource(
-                schemaOntologyRes +
-                        "/" + config.getBratRelativeDataHome() +
-                        "/" + config.getBratDataName()
-        );
+        Resource dataOntologyRes = createDataOntologyResource();
         dataOntology.add(dataOntologyRes, RDF.type, OWL2.Ontology);
         dataOntology.add(dataOntologyRes, OWL2.imports, schemaOntologyRes);
-        dataOntology.add(dataOntologyRes, DCTerms.source, config.getBratDataUrl());
-
-        dataOntology.add(DCTerms.source, RDF.type, OWL2.AnnotationProperty);
-
+        if (config.isReferenceBratServer()) {
+            dataOntology.setNsPrefix("dcterms", DCTerms.NS);
+            dataOntology.add(DCTerms.source, RDF.type, OWL2.AnnotationProperty);
+            dataOntology.add(dataOntologyRes, DCTerms.source, config.getBratDataUrl());
+        }
         dataOntology.setNsPrefixes(schemaOntology.getNsPrefixMap());
-        dataOntology.setNsPrefix("dcterms", DCTerms.NS);
         dataOntology.setNsPrefix("", getOntologyResource(dataOntology).getURI() + LOCAL_NAME_DELIMITER);
+
+    }
+
+    private Resource createDataOntologyResource() {
+        String relativePath =
+                (config.getBratRelativeDataHome() == null) ? "" : "/" + config.getBratRelativeDataHome();
+        return dataOntology.createResource(
+                getOntologyResource(schemaOntology) +
+                        relativePath +
+                        "/" + config.getBratDataName()
+        );
     }
 
     private String getTypeRelatedLocalAnnotationId(BratAnnotation annotation) {
         return annotation.getID().substring(1);
     }
 }
+
