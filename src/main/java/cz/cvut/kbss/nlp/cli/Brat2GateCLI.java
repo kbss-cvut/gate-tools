@@ -2,17 +2,21 @@ package cz.cvut.kbss.nlp.cli;
 
 
 import cz.cvut.kbss.nlp.cli.util.CmdLineUtils;
+import gate.*;
+import gate.creole.brat.*;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.FileUtils;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 
 /**
@@ -20,31 +24,49 @@ import java.util.stream.Collectors;
  */
 public class Brat2GateCLI {
 
-    // cat input-data.rdf | sem-pipes execute --instance "<http://url>"
-    //                   --config-file "$PATH/config.ttl"
-    //                   --input-binding-file "$PATH/input-binding.ttl" --output-binding-file "$PATH/output-binding.ttl"
-    //                   --input-file --output-file
-    // > output.data.rdf
-
     private static final Logger LOG = LoggerFactory.getLogger(Brat2GateCLI.class);
 
-    @Option(name = "-p", aliases = "--ontology-prefix-file", metaVar = "PREFIXES_FILE", usage = "Ontology containing prefixes")
-    private Path prefixesFile;
+    @Option(name = "-o", aliases = "--input-schema-file", metaVar = "ONTOLOGY_SCHEMA_FILE",
+            usage = "Ontology providing schema according to which annotations are made. " +
+                    "The ontology should provide at least mapping of prefixes." +
+                    "In case the file contains OWL ontology, its IRI is used to infer name for output data ontology IRI." +
+                    "By default ontology.ttl file is searched within directory of input text file.")
+    private Path inputSchemeOntologyFile;
 
-    @Option(name = "-t", aliases = "--input-text-file", metaVar = "TEXT_FILE", usage = "Input text file", required = true)
+    @Option(name = "-t", aliases = "--input-text-file", metaVar = "TEXT_FILE",
+            usage = "Input text file", required = true)
     private Path inputTextFile;
 
-    @Option(name = "-b", aliases = "--input-brat-annotation-file", metaVar = "BRAT_ANNOTATION_FILE", usage = "Input brat annotation file")
+    @Option(name = "-b", aliases = "--input-brat-annotation-file", metaVar = "BRAT_ANNOTATION_FILE",
+            usage = "Input brat annotation file")
     private Path inputBratAnnotationFile;
 
-    @Option(name = "-g", aliases = "--output-gate-file", metaVar = "GATE_DOCUMENT_FILE", usage = "Output gate document file")
+    @Option(name = "-g", aliases = "--output-gate-file", metaVar = "GATE_DOCUMENT_FILE",
+            usage = "Output gate document file")
     private Path outputGateDocumentFile;
 
-    @Option(name = "-d", aliases = "--output-instance-data-file", metaVar = "INSTANCE_DATA_FILE", usage = "Output ontology file with instance data")
+    @Option(name = "-d", aliases = "--output-instance-data-file", metaVar = "ONTOLOGY_DATA_FILE",
+            usage = "Output ontology file with instance data.")
     private Path outputInstanceDataFile;
 
+    @Option(name = "-m", aliases = "--mime-type", metaVar = "MIME_TYPE",
+            usage = "Mime type of output gate document file i.e. text/plain (default), text/x-brat")
+    private String mimeType = "text/plain";
 
-    public static void main(String[] args) throws IOException {
+    @Option(name = "-s", aliases = "--brat-server-url", metaVar = "BRAT_SERVER_URL",
+            usage = "Brat server url (e.g. https://cvut.cz/brat)")
+    private URL bratServerUrl;
+
+    @Option(name = "-h", aliases = "--brat-data-home-directory", metaVar = "DATA_ROOT_DIRECTORY",
+            usage = "Root directory of Brat data collections that is shown when redirected to Brat server url")
+    private Path bratHome;
+
+    @Option(name = "-c", aliases = "--check-ontology-entities", metaVar = "DATA_ROOT_DIRECTORY",
+            usage = "Check whether ontological entities such as OWL classes and OWL object properties " +
+                    "exists within provided schema ontology.")
+    private boolean checkOntologyEntities = false;
+
+    public static void main(String[] args) throws Exception {
 
         Brat2GateCLI asArgs = new Brat2GateCLI();
 
@@ -52,8 +74,12 @@ public class Brat2GateCLI {
         CmdLineParser argParser = new CmdLineParser(asArgs);
         CmdLineUtils.parseCommandLine(args, argParser);
 
-        String output = Arrays.stream(args).collect(Collectors.joining(" "));
-        LOG.info("Executing brat2gate cli ... " + output);
+        String output = String.join(" ", args);
+        LOG.info(String.format(
+                "Executing cli: %s %s",
+                SubCommand.BRAT2GATE_MODULE.name.toString(),
+                output)
+        );
 
         // ----- load input model
         Model inputDataModel = ModelFactory.createDefaultModel();
@@ -70,12 +96,12 @@ public class Brat2GateCLI {
             LOG.debug("Using inferred input brat annotation file {}.", asArgs.inputBratAnnotationFile);
         }
 
-        if (asArgs.prefixesFile != null) {
-            LOG.debug("Using provided ontology prefixes file {}.", asArgs.prefixesFile);
+        if (asArgs.inputSchemeOntologyFile != null) {
+            LOG.debug("Using provided input schema ontology file {}.", asArgs.inputSchemeOntologyFile);
         } else {
-            asArgs.prefixesFile = asArgs.inputTextFile.
-                    resolveSibling("prefixes.ttl");
-            LOG.debug("Using inferred ontology prefixes file {}.", asArgs.prefixesFile);
+            asArgs.inputSchemeOntologyFile = asArgs.inputTextFile.
+                    resolveSibling("ontology.ttl");
+            LOG.debug("Using inferred input schema ontology file {}.", asArgs.inputSchemeOntologyFile);
         }
 
         if (asArgs.outputGateDocumentFile != null) {
@@ -93,27 +119,54 @@ public class Brat2GateCLI {
                     resolveSibling(fileId + ".ttl");
             LOG.debug("Using inferred output instance data file {}.", asArgs.outputInstanceDataFile);
         }
-//        if (asArgs.isInputDataFromStdIn) {
-//            LOG.info("Loading input data from std-in ...");
-//            inputDataModel.read(System.in, null, FileUtils.langTurtle);
-//        }
-//
-//        LOG.info("Processing successfully finished.");
-//       // outputExecutionContext.getDefaultModel().write(System.out);
-//
-//
-//        // return output data
-//        if (asArgs.outputRdfFile != null) {
-//            outputExecutionContext.getDefaultModel().write(new FileOutputStream(asArgs.outputRdfFile), FileUtils.langTurtle);
-//        } else {
-//            outputExecutionContext.getDefaultModel().write(System.out, FileUtils.langTurtle);
-//        }
-//
-//        return;
+
+        Brat2OntoConfig brat2OntoConfig = new Brat2OntoConfig(
+                asArgs.bratServerUrl,
+                asArgs.bratHome,
+                asArgs.inputTextFile,
+                asArgs.checkOntologyEntities
+        );
+
+        OntologyHelper ontologyHelper = new OntologyHelper(
+                brat2OntoConfig, getModel(asArgs.inputSchemeOntologyFile)
+        );
+
+        initializeDocumentFormats(ontologyHelper);
+
+        saveOutputGateDocument(asArgs.inputTextFile, asArgs.outputGateDocumentFile, asArgs.mimeType);
+
+        saveInstanceDataFile(ontologyHelper.getDataOntology(), asArgs.outputInstanceDataFile);
     }
 
+    private static Model getModel(Path configFile) throws IOException {
+        LOG.info("Loading ontology from file {} ...", configFile);
+        return ModelFactory.createDefaultModel().read(configFile.toUri().toURL().toString());
+    }
 
+    private static void saveInstanceDataFile(OntModel dataOntology, Path outputInstanceDataFile) throws IOException {
+        LOG.info("Saving output ontology data file to {} ...", outputInstanceDataFile);
+        try (OutputStream outputInstanceDataStream = Files.newOutputStream(outputInstanceDataFile)) {
+            dataOntology.write(outputInstanceDataStream, FileUtils.langTurtle);
+        }
+    }
 
+    private static void saveOutputGateDocument(Path inputTextFile, Path outputGateDocumentFile, String mimeType) throws Exception {
+        FeatureMap params = Factory.newFeatureMap();
+        params.put(Document.DOCUMENT_URL_PARAMETER_NAME, inputTextFile.toUri().toURL());
+        params.put(Document.DOCUMENT_ENCODING_PARAMETER_NAME, "UTF-8");
+        params.put(Document.DOCUMENT_MIME_TYPE_PARAMETER_NAME, mimeType);
+        Document doc = (Document)Factory.createResource("gate.corpora.DocumentImpl", params);
+        LOG.info("Saving output gate document file to {} ...", outputGateDocumentFile);
+        try (PrintStream ps = new PrintStream(Files.newOutputStream(outputGateDocumentFile))) {
+            ps.println(doc.toXml());
+            ps.flush();
+        }
+    }
 
+    private static void initializeDocumentFormats(OntologyHelper ontologyHelper) throws Exception {
+        Gate.init();
+        new BratDocumentFormat().init();
+        new OntoDocumentFormat(ontologyHelper).init();
+    }
 
 }

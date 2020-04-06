@@ -15,6 +15,7 @@ public class CmdLineUtils {
             System.err.println(ex.getMessage());
             System.err.print("$0 ");
             argParser.printSingleLineUsage(System.err);
+            System.err.println("\n");
             argParser.printUsage(System.err);
             System.err.println();
        
