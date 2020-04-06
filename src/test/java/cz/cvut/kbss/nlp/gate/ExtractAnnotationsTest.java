@@ -13,7 +13,7 @@ public class ExtractAnnotationsTest {
 
     @Test
     public void testReadDocument() throws GateException {
-        String file = "gate-outpu.xml";
+        String file = "src/test/resources/gate-outpu.xml";
         Document doc = ExtractAnnotations.readDocument(file);
         Assert.assertNotNull(doc);
     }
