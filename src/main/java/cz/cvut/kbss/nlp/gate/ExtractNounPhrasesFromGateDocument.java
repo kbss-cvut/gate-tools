@@ -3,7 +3,9 @@ package cz.cvut.kbss.nlp.gate;
 import gate.*;
 import gate.util.InvalidOffsetException;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import static cz.cvut.kbss.nlp.gate.ExtractAnnotations.readDocument;
 public class ExtractNounPhrasesFromGateDocument {
 
     private static List<String> stopwordsList;
+    public static String filename = "DA42-POH-40-NPchunker.xml";
 
     static {
         try {
@@ -28,12 +31,12 @@ public class ExtractNounPhrasesFromGateDocument {
     private static final String NOUN_CHUNK = "NounChunk";
 
     public static void main(String[] args) throws Exception{
-        Document d = readDocument(ExtractNounPhrasesFromGateDocument.class.getClassLoader().getResource("DA42-POH-40-NPchunker.xml").getFile());
+        Document d = readDocument(ExtractNounPhrasesFromGateDocument.class.getClassLoader().getResource(filename).getFile());
         extractNounPhrases(d);
 
     }
 
-    private static void extractNounPhrases(Document d) throws InvalidOffsetException {
+    private static void extractNounPhrases(Document d) throws InvalidOffsetException, IOException {
         AnnotationSet as = d.getAnnotations("");
         DocumentContent documentContent = d.getContent();
         List<String> np = new ArrayList<>();
@@ -46,7 +49,16 @@ public class ExtractNounPhrasesFromGateDocument {
                 }
             }
         }
-        np.stream().distinct().forEach(System.out::println);
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename.replaceFirst(".xml", "-output.txt")));
+        np.stream().distinct().forEach(s -> {
+            try {
+                fileWriter.write(s);
+                fileWriter.newLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        fileWriter.close();
 
     }
 
