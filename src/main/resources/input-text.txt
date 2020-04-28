@@ -1,0 +1,7 @@
+air conditioning system.
+aircraft
+airfoil: That portion of the system which is used to eliminate or prevent the formation of ice on all airfoil surfaces. Includes wings, airfoil sections of the empennage, and pylons.
+failure mode is here.
+What about Component?
+Is it a function?
+Oh, that was the front spar.
