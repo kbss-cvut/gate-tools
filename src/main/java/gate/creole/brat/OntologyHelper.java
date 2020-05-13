@@ -4,6 +4,7 @@ import cz.cvut.kbss.exception.BratProcessingException;
 import cz.cvut.kbss.exception.OntologyRequirementsException;
 import cz.cvut.kbss.nlp.Vocabulary;
 import gate.creole.brat.annotations.BratAnnotation;
+import gate.creole.brat.annotations.Note;
 import gate.creole.brat.annotations.Relation;
 import gate.creole.brat.annotations.TextBound;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -97,6 +98,20 @@ public class OntologyHelper {
         bratAnnId2resource.put(textBound.getID(), individual);
 
         return individual;
+    }
+
+    /*
+     * Annotate RDF resource to which brat Note refers to. If there is a note for the resource,
+     * it will become both rdfs:label and rdfs:comment.
+     *
+     * @param note Annotation representing note related to RDF resource.
+     * @return
+     */
+    public Resource annotateResource(Note note) {
+        Resource resource = getIndividual(note.getTarget());
+        resource.addLiteral(RDFS.label, note.getText());
+        resource.addLiteral(RDFS.comment, note.getText());
+        return resource;
     }
 
     /**
