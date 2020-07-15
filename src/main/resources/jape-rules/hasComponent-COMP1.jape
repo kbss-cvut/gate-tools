@@ -1,0 +1,42 @@
+Phase: OntoMatching
+Input: Component Token Lookup
+Options: control = appelt
+
+Macro: LIST1
+(
+(({Token.category == DT})?{Lookup.class == Component}{Token.string == ","})[0,10]
+(({Token.category == DT})?{Lookup.class == Component})
+({Token.string == ","})?
+({Token.category == CC})
+(({Token.category == DT})?{Lookup.class == Component})
+)
+
+Macro: LIST2
+(
+(({Token.category == DT})?({Lookup.class == Component}):sub1)
+({Token.string == ","})?
+({Token.category == CC})
+(({Token.category == DT})?({Lookup.class == Component}):sub2)
+)
+
+// superConcept COMP subConcept1 [,] CC subConcept2
+Rule: COMPRelation1
+(
+  ({Lookup.class == Component}):superconcept
+  ({Lookup.class == "http://onto.fel.cvut.cz/ontologies/lexicon/COMP"})
+  (LIST2):subconcept
+
+):comp1
+-->
+:comp1.Relation= {uri = "http://onto.fel.cvut.cz/ontologies/fmea/component38/hasComponent", rule = "COMPRelation1", Arg1 = :superconcept.Lookup.class, Arg2 = :sub1.Lookup.class, Arg3 = :sub2.Lookup.class}
+
+// superConcept COMP subConcept
+Rule: COMPRelation2
+(
+  ({Lookup.class == Component}):superconcept
+  ({Lookup.class == "http://onto.fel.cvut.cz/ontologies/lexicon/COMP"})
+  ({Lookup.class == Component}):subconcept
+
+):comp2
+-->
+:comp2.Relation= {uri = "http://onto.fel.cvut.cz/ontologies/fmea/component38/hasComponent", rule = "COMPRelation2", Arg1 = :superconcept.Lookup.class, Arg2 = :subconcept.Lookup.class}

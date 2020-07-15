@@ -1,0 +1,12 @@
+Phase: OntoMatching
+Input: Lookup
+Options: control = appelt
+
+Rule: ComponentLookup
+(
+  {Lookup.class == Component}
+
+):component
+-->
+:component.Component= {:component.Lookup}
+

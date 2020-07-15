@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://onto.fel.cvut.cz/ontologies/lexicon#"
+     xml:base="http://onto.fel.cvut.cz/ontologies/lexicon"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/BE -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/BE">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+        <rdfs:label>be</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/CATV -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/CATV">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+        <rdfs:comment>Verbs of Classification. Set of verbs of classification plus the preposition that
+normally follows them.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/CN -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/CN">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+        <rdfs:comment>Class Name. Generic names for semantic roles usually accompanied by
+preposition.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/COMP -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/COMP">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+        <rdfs:comment>Verbs of Composition. Set of verbs meaning that something is made up of
+different parts.</rdfs:comment>
+        <rdfs:label>comp</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/COMPR -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/COMPR">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+        <rdfs:label>compr</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/term -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/term"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/categorize_in -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/categorize_in">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CATV"/>
+        <rdfs:label>categorize in</rdfs:label>
+        <rdfs:label>categorize into</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/category -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/category">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>category</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/class -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/class">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>class</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/classify_in -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/classify_in">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CATV"/>
+        <rdfs:label>classify in</rdfs:label>
+        <rdfs:label>classify into</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/compose_of -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/compose_of">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>compose of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/consist_of -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/consist_of">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>consist of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/constitute_of -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/constitute_of">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>constitute by</rdfs:label>
+        <rdfs:label>constitute of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/form_of -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/form_of">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>form by</rdfs:label>
+        <rdfs:label>form of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/group -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/group">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>group</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/have -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/have">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>have</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/install_in -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/install_in">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMPR"/>
+        <rdfs:label>install in</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/make_up_of -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/make_up_of">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMP"/>
+        <rdfs:label>make up of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/member -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/member">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>member</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/part -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/part">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/COMPR"/>
+        <rdfs:label>part</rdfs:label>
+        <rdfs:label>part of</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/set -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/set">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>set</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/lexicon/type -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/lexicon/type">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/CN"/>
+        <rdfs:label>type</rdfs:label>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

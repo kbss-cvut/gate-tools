@@ -1,0 +1,2 @@
+http://onto.fel.cvut.cz/ontologies/lexicon/ lexicon.owl
+
