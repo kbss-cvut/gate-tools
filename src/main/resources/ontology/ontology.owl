@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://onto.fel.cvut.cz/ontologies/fmea/component38/"
+     xml:base="http://onto.fel.cvut.cz/ontologies/fmea/component38/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/">
+        <owl:imports rdf:resource="http://onto.fel.cvut.cz/ontologies/lexicon/"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/hasComponent -->
+
+    <owl:ObjectProperty rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/hasComponent">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/Component -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component">
+        <rdfs:label>component</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/bottom_shell -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/bottom_shell">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>bottom shell</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/center_wing -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/center_wing">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/wing"/>
+        <rdfs:label>center wing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/disposition -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/disposition">
+        <rdfs:label>disposition</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/empennage -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/empennage">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>empennage</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/engine_compartment -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/engine_compartment">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>engine compartment</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/failure_mode -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/failure_mode">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/function"/>
+        <rdfs:label>failure mode</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/firewall -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/firewall">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>firewall</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/front_spar -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/front_spar">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/spar"/>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/fuel_tank -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/fuel_tank">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>fuel tank</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/function -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/function">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/disposition"/>
+        <rdfs:label>function</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/nacelle -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/nacelle">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>nacelle</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/rear_spar -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/rear_spar">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/spar"/>
+        <rdfs:label>rear spar</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/spar -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/spar">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/stabilizer -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/stabilizer">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>stabilizer</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/top_shell -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/top_shell">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>top shell</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/twin_spars -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/twin_spars">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/spar"/>
+        <rdfs:label>twin spars</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/wing -->
+
+    <owl:Class rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/wing">
+        <rdfs:subClassOf rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+        <rdfs:label>wing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/Prague -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/Prague">
+        <rdfs:label>prague</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://onto.fel.cvut.cz/ontologies/fmea/component38/front_spar -->
+
+    <owl:NamedIndividual rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/front_spar">
+        <rdf:type rdf:resource="http://onto.fel.cvut.cz/ontologies/fmea/component38/Component"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://onto.fel.cvut.cz/ontologies/fmea/component38/front_spar">
+        <rdfs:label>front spar</rdfs:label>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

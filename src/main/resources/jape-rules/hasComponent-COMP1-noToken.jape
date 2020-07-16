@@ -1,0 +1,16 @@
+Phase: OntoMatching
+Input: Split Component Lookup
+Options: control = appelt
+
+// SuperConcept COMP subConcept Split
+// Finds this sequence in one sentence regardless separating Token annotations. It doesn't match in case it finds a Lookup annotation of type different than Component.
+Rule: COMPRelation11
+(
+  ({Lookup.class == Component}):superconcept
+  {Lookup.class == "http://onto.fel.cvut.cz/ontologies/lexicon/COMP"}
+  ({Lookup.class == Component}):subconcept
+  ({Lookup.class == Component})?:subconcept2
+
+):comp1
+-->
+:comp1.Relation= {uri = "http://onto.fel.cvut.cz/ontologies/fmea/component38/hasComponent", rule = "COMPRelation11", Arg1 = :superconcept.Lookup.class, Arg2 = :subconcept.Lookup.class, Arg3 = :subconcept2.Lookup.class}

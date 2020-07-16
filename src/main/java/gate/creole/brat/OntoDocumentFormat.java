@@ -5,6 +5,7 @@ import gate.corpora.MimeType;
 import gate.corpora.TextualDocumentFormat;
 import gate.creole.ResourceInstantiationException;
 import gate.creole.brat.annotations.BratAnnotation;
+import gate.creole.brat.annotations.Note;
 import gate.creole.brat.annotations.TextBound;
 import gate.creole.metadata.AutoInstance;
 import gate.creole.metadata.CreoleResource;
@@ -100,6 +101,8 @@ public class OntoDocumentFormat extends TextualDocumentFormat {
             case 'N':
                 return true;
             case '#':
+                Note note = (Note) annotation;
+                ontologyHelper.annotateResource(note);
                 return true;
         }
 

@@ -20,11 +20,15 @@ public class AnnotationPipeline {
 
     private static final String INPUT_FILE_NAME = "input-text.txt";
 
-    private static final String inputApplicationFile = "reliability-pipeline.xgapp";
+    private static final String inputApplicationFile = "NLP-pipeline.xgapp";
 
     private static List<String> annotTypesToWrite;
 
     private static final String LOOK_UP = "Lookup";
+
+    private static final String COMPONENT = "Component";
+
+    private static final String RELATION = "Relation";
 
     public static void main(String[] args) throws GateException, IOException {
         Gate.init();
@@ -33,6 +37,8 @@ public class AnnotationPipeline {
         getLookupAnnotations(output);
         annotTypesToWrite = new ArrayList<>();
         annotTypesToWrite.add(LOOK_UP);
+        annotTypesToWrite.add(COMPONENT);
+        annotTypesToWrite.add(RELATION);
         createOutputDocument(doc);
     }
 
@@ -61,7 +67,7 @@ public class AnnotationPipeline {
                     annotationsToWrite.addAll(annotsOfThisType);
                 }
             }
-            // Generate XML with the specified annotations, in this case, Lookup annotations
+            // Generate XML with the specified annotations, in this case, Lookup, Component, and Relation annotations
             docXMLString = doc.toXml(annotationsToWrite);
         }
         // Generate XML with all annotations. Ignored in the current main implementation
