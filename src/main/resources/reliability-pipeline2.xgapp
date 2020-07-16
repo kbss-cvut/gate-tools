@@ -204,14 +204,14 @@
                         <string>ontology</string>
                         <gate.util.persistence.LRPersistence>
                           <resourceType>gate.creole.ontology.impl.sesame.OWLIMOntology</resourceType>
-                          <resourceName>reliability-rit-profile.rdf</resourceName>
+                          <resourceName>reliability-ann-profile.rdf</resourceName>
                           <initParams class="gate.util.persistence.MapPersistence">
                             <mapType>gate.util.SimpleFeatureMapImpl</mapType>
                             <localMap>
                               <entry>
                                 <string>rdfXmlURL</string>
                                 <gate.util.persistence.PersistenceManager-RRPersistence>
-                                  <uriString>$relpath$reliability-rit-profile.rdf</uriString>
+                                  <uriString>$relpath$reliability-ann-profile.rdf</uriString>
                                 </gate.util.persistence.PersistenceManager-RRPersistence>
                               </entry>
                             </localMap>
