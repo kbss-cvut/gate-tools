@@ -63,6 +63,17 @@ public class OntoDocumentFormat extends TextualDocumentFormat {
         }
     }
 
+    /**
+     * Converts brat a annotation to gate annotations and to ontology.
+     *
+     * @param annotation - the brat annotation, converted to be converted
+     * @param brat2GATE - map filled with brat to gate annotation ids map. mapping is added only for brat term annotations (i.e. 'T')
+     * @param original - The gate document's annotation set to add the converted term annotations
+     * @param relations - The gate document's annotation set to add the converted relation annotations
+     * @param ontologyHelper - The ontology builder where annotations are converted to ontology
+     * @return
+     * @throws Exception
+     */
     private static boolean process(BratAnnotation annotation,
                                    Map<String, Integer> brat2GATE,
                                    AnnotationSet original, RelationSet relations,

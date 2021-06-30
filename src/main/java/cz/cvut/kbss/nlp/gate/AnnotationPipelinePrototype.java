@@ -43,8 +43,8 @@ public class AnnotationPipelinePrototype {
 
     public static void executePipelineDA42POH() throws GateException, IOException {
         Gate.init();
-        String outputDir = "semantic-reliability\\annotations\\BlueSky\\";
-        String input2 = "semantic-reliability\\reliability-model\\dev-a-input-documents\\blue-sky\\001-data\\DA42-POH.txt";
+        String outputDir = "c:\\Users\\user\\Documents\\skola\\projects\\2019-msmt-inter-excelence\\code\\semantic-reliability\\annotations\\BlueSky\\";
+        String input2 = "c:\\Users\\user\\Documents\\skola\\projects\\2019-msmt-inter-excelence\\code\\semantic-reliability\\reliability-model\\dev-a-input-documents\\blue-sky\\001-data\\DA42-POH.txt";
 //
 //        executePipelineDA42POH(dirStr + "dirDA42-POH--has-component", dirStr + "DA42-POH-aa-rit\\");
 

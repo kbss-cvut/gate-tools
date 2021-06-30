@@ -33,7 +33,8 @@
         <dependency>
             <groupId>uk.ac.gate</groupId>
             <artifactId>gate-core</artifactId>
-            <version>8.6</version>
+            <version>8.6.1</version>
+<!--            <version>9.0.1</version>-->
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -44,6 +45,22 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>uk.ac.gate.plugins</groupId>-->
+<!--            <artifactId>tools</artifactId>-->
+<!--            <version>8.6</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>8.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.vlsi.mxgraph</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jena</groupId>

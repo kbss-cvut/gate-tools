@@ -5,9 +5,12 @@
 package cz.cvut.kbss.nlp.cli;
 
 
+import cz.cvut.kbss.nlp.cli.bk.MyCli;
+
 public enum SubCommand {
 
-    BRAT2GATE_MODULE("brat2gate", Brat2GateCLI.class);
+    BRAT2GATE_MODULE("brat2gate", Brat2GateCLI.class),
+    MY_CLI("mycli", MyCli.class);
 
     String name;
     Class klass;

@@ -5,7 +5,9 @@ import gate.annotation.AnnotationFactory;
 import gate.annotation.AnnotationSetImpl;
 import gate.annotation.DefaultAnnotationFactory;
 import gate.annotation.NodeImpl;
+import gate.corpora.ConllDocumentFormat;
 import gate.corpora.DocumentImpl;
+import gate.creole.ResourceInstantiationException;
 import gate.util.GateException;
 import gate.util.InvalidOffsetException;
 import gate.util.SimpleFeatureMapImpl;
@@ -48,6 +50,34 @@ public class ExtractAnnotations {
         }
     }
 
+    public static void tmp(String path){
+//        gate.corpora.MimeType mt;
+//        mt.
+        Document d = null;
+        try {
+             d = readDocument(path);
+        } catch (GateException e) {
+            e.printStackTrace();
+        }
+        if(d == null)
+            return;
+
+        System.out.println(d.getContent().size());
+
+        String content = d.getContent().toString();//.getContent(0L, d.getContent().size());
+        System.out.println(content);
+////        d.a
+//        ConllDocumentFormat df = new ConllDocumentFormat();// CoNLL/IOB documents
+//        df.getElement2StringMap();
+//        try {
+//            df.init();
+////            DataStore
+//        } catch (ResourceInstantiationException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
     protected static Resource getType(String annotationType){
         // normalize annotation type string
         switch (annotationType){
@@ -60,12 +90,14 @@ public class ExtractAnnotations {
 
     public static Document readDocument(String filePath) throws GateException {
         File f = new File(filePath);
-        DocumentFormat.getSupportedMimeTypes().forEach(m -> System.out.println(m));
+//        DocumentFormat.getSupportedMimeTypes().forEach(m -> System.out.println(m));
         FeatureMap fm = Factory.newFeatureMap();
-
+//        fm.addFeatureMapListener();
         fm.put(SOURCE_URL, f.toURI().toString());
         Document d = (Document)Factory
                 .createResource(DocumentImpl.class.getCanonicalName(), fm);
+
+//        Writer
         return d;
     }
 
@@ -79,17 +111,29 @@ public class ExtractAnnotations {
     }
 
     public static String getAnnotatedText(Document d, Annotation a){
+        return getContent(d, a.getStartNode().getOffset() , a.getEndNode().getOffset());
+//        try {
+//            return d.getContent().getContent(a.getStartNode().getOffset() , a.getEndNode().getOffset()).toString();
+//        } catch (InvalidOffsetException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+    }
+
+
+
+    public static String getContent(Document d, Annotation a){
         try {
-            return d.getContent().getContent(a.getStartNode().getOffset() , a.getEndNode().getOffset()).toString();
+            return d.getContent().getContent(a.getStartNode().getOffset(), a.getEndNode().getOffset()).toString();
         } catch (InvalidOffsetException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-
-    public static Map<Integer, Integer> findTextIn(String text, String textContext, Document doc){
-        return findTextIn(text, textContext, doc, 0L, doc.getContent().size());
+    public static String getFeature(Annotation a, String featureName){
+        return Optional.ofNullable(a.getFeatures().get(featureName))
+                .map(Object::toString).orElse(null);
     }
 
     public static String getContent(Document d, Long from, Long to){
@@ -101,6 +145,9 @@ public class ExtractAnnotations {
         return null;
     }
 
+    public static Map<Integer, Integer> findTextIn(String text, String textContext, Document doc){
+        return findTextIn(text, textContext, doc, 0L, doc.getContent().size());
+    }
 
     public static Map<Integer, Integer> findTextIn(String text, String textContext, Document doc, Long from, Long to ){
         if(from == null)
@@ -407,19 +454,23 @@ public class ExtractAnnotations {
         }
     }
 
+
     public static void main(String[] args) throws Exception {
-//        String file = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.xml";
-         String file = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.xml";
-        String outputFile = "c:/Users/user/Documents/skola/proje cts/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH-004.xml";
-//        String onto = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.ttl";
+////        String file = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.xml";
+//         String file = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.xml";
+//        String outputFile = "c:/Users/user/Documents/skola/proje cts/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH-004.xml";
+////        String onto = "c:/Users/user/Documents/skola/projects/2019-msmt-inter-excelence/code/semantic-reliability/reliability-model/dev-b-input-analysis/001-data_blue-sky_manua-text-annotation/DA42-POH.ttl";
+        String file = "c:\\Users\\kostobog\\Documents\\skola\\projects\\2019-msmt-inter-excelence\\code\\semantic-reliability\\annotations\\BlueSky\\DA42-POH--has-component\\DA42-POH-38.xml";
+        String outputFile = "c:\\Users\\kostobog\\Documents\\skola\\projects\\2019-msmt-inter-excelence\\code\\semantic-reliability\\annotations\\BlueSky\\DA42-POH--has-component\\DA42-POH-38.txt";
         File f = new File(file);
 
 
 //        Model m = extractAnnotations(file);
 //        Model m = extractOATAnnotationsAsClasses(file);
-        Model m = extractOATAnnotationsAsInstances(file, outputFile);
-        File out = changeExtension(f, "ttl");
-        saveModel(m, out);
+        tmp(file);
+//        Model m = extractOATAnnotationsAsInstances(file, outputFile);
+//        File out = changeExtension(f, "ttl");
+//        saveModel(m, out);
 
 //        insertInstancesInGATEXml(onto, file);
 

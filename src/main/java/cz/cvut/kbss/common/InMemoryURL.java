@@ -107,12 +107,28 @@ public class InMemoryURL {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         String path = "my.path.haha";
         URL url = InMemoryURL.getInstance().build(path, "This is some in memory data!!!\nsecond line.");
         try(BufferedReader r = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))){
             r.lines().forEach(l -> System.out.println("line read from in memory resource : " + l));
         }
 
+        try(BufferedReader r = new BufferedReader(new InputStreamReader(url.openStream()))){
+            r.lines().forEach(l -> System.out.println("line read from in memory resource : " + l));
+        }
+
+        url = url.toURI().toURL();
+
+        URI u = new URI("as");
+
+
+        try(BufferedReader r = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))){
+            r.lines().forEach(l -> System.out.println("line read from in memory resource : " + l));
+        }
+
+        try(BufferedReader r = new BufferedReader(new InputStreamReader(url.openStream()))){
+            r.lines().forEach(l -> System.out.println("line read from in memory resource : " + l));
+        }
     }
 }
