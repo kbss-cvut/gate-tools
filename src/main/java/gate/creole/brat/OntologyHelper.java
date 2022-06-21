@@ -93,7 +93,7 @@ public class OntologyHelper {
         individual.addLiteral(Vocabulary.isDenotedBy, textBound.getText());
         individual.addLiteral(RDFS.label, textBound.getText());
         Resource selector = dataOntology.createResource();
-        individual.addLiteral(Vocabulary.hasSelector, selector);
+        individual.addProperty(Vocabulary.hasSelector, selector);
         selector.addLiteral(Vocabulary.start, textBound.getStartOffset());
         selector.addLiteral(Vocabulary.end, textBound.getEndOffset());
         if (config.isReferenceBratServer()) {
