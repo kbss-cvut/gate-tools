@@ -92,6 +92,10 @@ public class OntologyHelper {
         individual.addProperty(RDF.type, OWL2.NamedIndividual);
         individual.addLiteral(Vocabulary.isDenotedBy, textBound.getText());
         individual.addLiteral(RDFS.label, textBound.getText());
+        Resource selector = dataOntology.createResource();
+        individual.addLiteral(Vocabulary.hasSelector, selector);
+        selector.addLiteral(Vocabulary.start, textBound.getStartOffset());
+        selector.addLiteral(Vocabulary.end, textBound.getEndOffset());
         if (config.isReferenceBratServer()) {
             individual.addLiteral(DCTerms.source, config.getBratDataUrl(textBound.getID()));
         }
@@ -238,6 +242,12 @@ public class OntologyHelper {
         dataOntology.setNsPrefixes(schemaOntology.getNsPrefixMap());
         dataOntology.setNsPrefix("", getOntologyResource(dataOntology).getURI() + LOCAL_NAME_DELIMITER);
 
+        dataOntology.add(Vocabulary.dataPositionSelector, RDF.type, OWL2.Class);
+        dataOntology.add(Vocabulary.hasSelector, RDF.type, OWL2.ObjectProperty);
+        dataOntology.add(Vocabulary.start, RDF.type, OWL2.DatatypeProperty);
+        dataOntology.add(Vocabulary.end, RDF.type, OWL2.DatatypeProperty);
+
+        dataOntology.setNsPrefix(Vocabulary.webAnnotationOntologyPrefix, Vocabulary.webAnnotationOntologyNS);
     }
 
     private Resource createDataOntologyResource() {
