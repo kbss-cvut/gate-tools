@@ -18,7 +18,8 @@
     <repositories>
         <repository>
             <id>kbss</id>
-            <url>http://kbss.felk.cvut.cz/m2repo</url>
+            <name>KBSS Maven Repository</name>
+            <url>https://kbss.felk.cvut.cz/m2repo</url>
         </repository>
     </repositories>
 
