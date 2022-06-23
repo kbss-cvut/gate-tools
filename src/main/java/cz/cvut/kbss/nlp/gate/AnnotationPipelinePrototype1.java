@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class AnnotationPipelinePrototype1 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExtractAnnotations.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AnnotationPipelinePrototype1.class);
 
     private static final String OUTPUT_FILE_NAME = "out-Lookup.xml";
 
@@ -27,11 +27,11 @@ public class AnnotationPipelinePrototype1 {
 
     private static List<String> annotTypesToWrite;
 
-    private static final String LOOK_UP = "Lookup";
+    public static final String LOOK_UP = "Lookup";
 
-    private static final String COMPONENT = "Component";
+    public static final String COMPONENT = "Component";
 
-    private static final String RELATION = "Relation";
+    public static final String RELATION = "Relation";
 
     public static void main(String[] args) throws GateException, IOException {
         Gate.init();
@@ -48,23 +48,23 @@ public class AnnotationPipelinePrototype1 {
     protected static URI pipelineConfiguration1(){
         String root = "src/main/resources/";
         String pipelineTemplate = root + "NLP-pipeline-template.xgapp"; //t
-        List<String> japeRulePaths = Arrays.asList(
-                new File(root + "jape-rules")
-                        .listFiles(f -> f.getName().endsWith("jape"))
-        ).stream()
-                .map(f -> f.getAbsolutePath())
-                .collect(Collectors.toList());
+//        List<String> japeRulePaths = Arrays.asList(
+//                new File(root + "jape-rules")
+//                        .listFiles(f -> f.getName().endsWith("jape"))
+//        ).stream()
+//                .map(f -> f.getAbsolutePath())
+//                .collect(Collectors.toList());
 
         return ConfigurableGatePipeline.createPipelineConfigurationFile(
-                "src/main/resources/NLP-pipeline-template.xgapp",
-                japeRulePaths,
+                AnnotationPipelinePrototype1.class.getClassLoader().getResource("/NLP-pipeline-template.xgapp"),
+                root + "jape-rules",
                 "src/main/resources/ontology/ontology.owl",
                 "src/main/resources/ontology/mappings.txt",
                 "src/main/resources/pipeline-config-" + System.currentTimeMillis() + ".xgapp"
         ).toURI();
     }
 
-    private static Document executeApplication(Document doc, URL pipelineConfiguration) throws ResourceInstantiationException, ExecutionException, IOException, PersistenceException {
+    public static Document executeApplication(Document doc, URL pipelineConfiguration) throws ResourceInstantiationException, ExecutionException, IOException, PersistenceException {
         Corpus corpus = Factory.newCorpus("corpus");
         corpus.add(doc);
         CorpusController application = (CorpusController) PersistenceManager.loadObjectFromUrl(pipelineConfiguration);
@@ -78,9 +78,13 @@ public class AnnotationPipelinePrototype1 {
         annotations.stream().filter(a -> a.getType().equals(LOOK_UP)).forEach(System.out::println);
     }
 
-    private static void createOutputDocument(Document doc) throws IOException {
+    public static void createOutputDocument(Document doc) throws IOException {
+        createOutputDocument(doc, annotTypesToWrite);
+    }
+
+    public static void createOutputDocument(Document doc, List<String> annotTypesToWrite) throws IOException {
         String docXMLString = null;
-        if(!annotTypesToWrite.isEmpty()) {
+        if(annotTypesToWrite.isEmpty()) {
             Set<Annotation> annotationsToWrite = new HashSet<>();
             AnnotationSet defaultAnnots = doc.getAnnotations();
             for (String s : annotTypesToWrite) {

@@ -16,13 +16,13 @@ import java.util.*;
 
 public class AnnotationPipeline {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExtractAnnotations.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AnnotationPipeline.class);
 
     private static final String OUTPUT_FILE_NAME = "out-Lookup.xml";
 
     private static final String INPUT_FILE_NAME = "input-text.txt";
 
-            static final String inputApplicationFile = "NLP-pipeline.xgapp";
+    static final String inputApplicationFile = "NLP-pipeline.xgapp";
 
     private static List<String> annotTypesToWrite;
 

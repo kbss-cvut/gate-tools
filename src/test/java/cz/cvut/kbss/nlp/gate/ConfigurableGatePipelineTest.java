@@ -34,7 +34,36 @@ public class ConfigurableGatePipelineTest extends TestCase {
     }
     @Ignore
     @Test
+    public void testExamplePipeLine(){
+
+    }
+
+    @Test
+    public void testXGAPPTemplate(){
+        List<String> japeRulePaths = Arrays.asList(
+                        new File("src/main/resources/jape-rules")
+                                .listFiles(f -> f.getName().endsWith("jape"))
+                ).stream()
+                .map(f -> f.getAbsolutePath())
+                .collect(Collectors.toList());
+        String templateInstance = ConfigurableGatePipeline.instantiatePipeline(
+                "src/main/resources/NLP-pipeline-template.xgapp",
+                japeRulePaths,
+                "src/main/resources/ontology/ontology.owl",
+                "src/main/resources/ontology/mappings.txt"
+        );
+
+
+    }
+
+    @Ignore
+    @Test
     public void testExperiment() throws IOException {
+        // %%%ONTOLOGY_NAME%%% -> ontology.owl
+        // %%%MAPPING_URI%%% -> $relpath$/ontology/mappings.txt
+        // %%%ONTOLOGY_URI%%% -> $relpath$/ontology/reliability-components.owl
+        // %%%JAPE_RULE_SECTION%%% -> /jape-rules/*.jape
+
         List<String> japeRulePaths = Arrays.asList(
                 new File("src/main/resources/jape-rules")
                         .listFiles(f -> f.getName().endsWith("jape"))

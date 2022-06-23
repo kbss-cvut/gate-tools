@@ -1,2 +1,9 @@
 http://onto.fel.cvut.cz/ontologies/lexicon/ lexicon.owl
-
+http://onto.fel.cvut.cz/ontologies/fmea/component38/ ontology.owl
+http://onto.fel.cvut.cz/ontologies/fmea/19msmt/BlueSky/DA42-POH-merge ../../../../semantic-reliability/annotations/BlueSky/DA42-POH-merge-no-imports.owl
+http://onto.fel.cvut.cz/ontologies/nlp-da42-manual DA42-POH-merge.owl
+http://onto.fel.cvut.cz/ontologies/nlp-da42-manual ontology_1.owl
+http://onto.fel.cvut.cz/ontologies/ufo-local-extension/0.0.1
+http://onto.fel.cvut.cz/ontologies/da42/components DA42-POH-components.owl
+http://onto.fel.cvut.cz/ontologies/smart-wings/components smart-wings-components.owl
+http://onto.fel.cvut.cz/ontologies/reliability/components reliability-components.owl
