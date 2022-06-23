@@ -1,11 +1,13 @@
 package cz.cvut.kbss.nlp.cli;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class Brat2GateCLITest {
 
+    @Ignore
     @Test
     public void test_main() throws Exception {
         String inputTestFile = "c:\\Users\\kostobog\\Documents\\skola\\projects\\2019-msmt-inter-excelence\\code\\gate-tools\\testing\\test-brat-data-folder\\DA42-POH-38.txt";
