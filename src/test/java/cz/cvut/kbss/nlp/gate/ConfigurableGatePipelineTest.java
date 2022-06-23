@@ -3,6 +3,7 @@ package cz.cvut.kbss.nlp.gate;
 import gate.Gate;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Ignore
 public class ConfigurableGatePipelineTest extends TestCase {
 
     public String configurePipelineExample1(){
@@ -30,7 +32,7 @@ public class ConfigurableGatePipelineTest extends TestCase {
 
         return templateInstance;
     }
-
+    @Ignore
     @Test
     public void testExperiment() throws IOException {
         List<String> japeRulePaths = Arrays.asList(
@@ -52,6 +54,4 @@ public class ConfigurableGatePipelineTest extends TestCase {
         assertEquals(expected, templateInstance);
     }
 
-    public void testRunConfigurablePipline(){
-    }
 }
