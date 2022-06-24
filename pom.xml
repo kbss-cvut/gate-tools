@@ -146,7 +146,7 @@
         <repository>
             <id>github</id>
             <name>GitHub KBSS-CVUT Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/kbss-cvut/m2repo</url>
+            <url>https://maven.pkg.github.com/kbss-cvut/gate-tools</url>
         </repository>
     </distributionManagement>
 </project>
