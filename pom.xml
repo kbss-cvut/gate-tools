@@ -142,4 +142,11 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub KBSS-CVUT Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/kbss-cvut/m2repo</url>
+        </repository>
+    </distributionManagement>
 </project>
