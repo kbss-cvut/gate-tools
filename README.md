@@ -1,6 +1,12 @@
 # NLP tools
 
-Command-line tool of NLP-related utilities centered mainly around GATE framework.
+Command-line tool of NLP-related utilities centered mainly around [GATE](https://gate.ac.uk/) framework.
+
+## Build
+
+Project can be built using command `mvn clean package`.
+
+## Running CLI
 
 -----
 This repository was created within the project [LTACH19032](https://starfos.tacr.cz/en/project/LTACH19032).
