@@ -8,6 +8,8 @@ Project can be built using command `mvn clean package`.
 
 ## Running CLI
 
+The command-line tool can be run using `./bin/gate-tools.sh`. Running without parameters gives help how to execute subsequent commands.
+
 -----
 This repository was created within the project [LTACH19032](https://starfos.tacr.cz/en/project/LTACH19032).
 <p align="center">
