@@ -1,5 +1,7 @@
 # NLP tools
 
+Command-line tool of NLP-related utilities centered mainly around GATE framework.
+
 -----
 This repository was created within the project [LTACH19032](https://starfos.tacr.cz/en/project/LTACH19032).
 <p align="center">
