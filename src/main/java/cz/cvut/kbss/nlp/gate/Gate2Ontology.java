@@ -61,7 +61,7 @@ public class Gate2Ontology {
 
         public void convert(Document d, Model m, String ns){
             this.d = d;
-            documentUri = m.createResource(d.getSourceUrl().getRef());
+            documentUri = m.createResource(d.getSourceUrl().toString());
             this.ns = ns;
             d.getAnnotations().stream()
                     .filter(a -> ANNIEConstants.LOOKUP_ANNOTATION_TYPE.equals(a.getType()))

@@ -1,0 +1,14 @@
+Two mt-Propeller MTV-6-A-C-F/CF187-129 hydraulically regulated 3-bladed constant
+speed feathering propellers are installed. Each propeller has wood composite blades with
+fiber-reinforced plastic coating and stainless steel edge cladding; in the region of the
+propeller hub the leading edge is coated with adhesive PU foil. These blades combine
+the lowest weight whilst minimizing vibration.
+Propeller Control
+The propeller pitch control system is integrated into the engine. The pitch is controlled
+automatically by the ECU. To change the blade pitch angle gearbox oil is pumped into
+the propeller hub. The oil pressure is regulated by an electrically operated valve, the
+governor valve, which is controlled by the ECU. Increasing the oil pressure leads to a
+decrease of pitch and a higher RPM. Decreasing the pressure leads to higher pitch and
+a lower RPM.
+Depending on the power setting the propeller pitch is adjusted such that the required RPM
+will be obtained as shown in the following diagram.

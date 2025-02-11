@@ -255,7 +255,7 @@
                               <entry>
                                 <string>rdfXmlURL</string>
                                 <gate.util.persistence.PersistenceManager-RRPersistence>
-                                  <uriString>$relpath$/ontology/ontology.owl</uriString>
+                                  <uriString>$relpath$/ontology/reliability-components.owl</uriString>
                                 </gate.util.persistence.PersistenceManager-RRPersistence>
                               </entry>
                             </localMap>

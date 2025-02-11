@@ -15,7 +15,7 @@ import java.util.*;
 
 public class AnnotationPipelinePrototype {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExtractAnnotations.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AnnotationPipelinePrototype.class);
 
     private static final String OUTPUT_FILE_NAME = "out-Lookup.xml";
 

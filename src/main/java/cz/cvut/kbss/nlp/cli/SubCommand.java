@@ -7,7 +7,8 @@ package cz.cvut.kbss.nlp.cli;
 
 public enum SubCommand {
 
-    BRAT2GATE_MODULE("brat2gate", Brat2GateCLI.class);
+    BRAT2GATE_MODULE("brat2gate", Brat2GateCLI.class),
+    ANNOTATE("annotate", AnnotationPipelineCLI.class);
 
     String name;
     Class klass;
