@@ -46,7 +46,7 @@ public class ConfigurableGatePipeline {
         return loadResource(File.pathSeparator + NLP_PIPELINE_TEMPLATE);
     }
     public static URL getNlpPipelineTemplateURL(){
-        return getResourceURL(File.pathSeparator + NLP_PIPELINE_TEMPLATE);
+        return getResourceURL("." + File.separator + NLP_PIPELINE_TEMPLATE);
     }
 
     public static String loadResource(String resourcePath) throws IOException {

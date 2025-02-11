@@ -1,6 +1,7 @@
 package cz.cvut.kbss.nlp.gate;
 
 import gate.*;
+import gate.corpora.export.GateXMLExporter;
 import gate.creole.ExecutionException;
 import gate.creole.ResourceInstantiationException;
 import gate.persist.PersistenceException;
@@ -12,10 +13,17 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AnnotationPipelinePrototype1 {
+
+    public static final String LOOK_UP = "Lookup";
+
+    public static final String COMPONENT = "Component";
+
+    public static final String RELATION = "Relation";
 
     private static final Logger LOG = LoggerFactory.getLogger(AnnotationPipelinePrototype1.class);
 
@@ -25,13 +33,7 @@ public class AnnotationPipelinePrototype1 {
 
     private static final String inputApplicationFile = "NLP-pipeline.xgapp";
 
-    private static List<String> annotTypesToWrite;
-
-    public static final String LOOK_UP = "Lookup";
-
-    public static final String COMPONENT = "Component";
-
-    public static final String RELATION = "Relation";
+    private static List<String> annotTypesToWrite = Arrays.asList(LOOK_UP, COMPONENT, RELATION);
 
     public static void main(String[] args) throws GateException, IOException {
         Gate.init();
@@ -56,7 +58,7 @@ public class AnnotationPipelinePrototype1 {
 //                .collect(Collectors.toList());
 
         return ConfigurableGatePipeline.createPipelineConfigurationFile(
-                AnnotationPipelinePrototype1.class.getClassLoader().getResource("/NLP-pipeline-template.xgapp"),
+                AnnotationPipelinePrototype1.class.getClassLoader().getResource("./NLP-pipeline-template.xgapp"),
                 root + "jape-rules",
                 "src/main/resources/ontology/ontology.owl",
                 "src/main/resources/ontology/mappings.txt",
@@ -79,12 +81,16 @@ public class AnnotationPipelinePrototype1 {
     }
 
     public static void createOutputDocument(Document doc) throws IOException {
-        createOutputDocument(doc, annotTypesToWrite);
+        createOutputDocument(doc, null);
     }
 
-    public static void createOutputDocument(Document doc, List<String> annotTypesToWrite) throws IOException {
+    public static void createOutputDocument(Document doc, Path output) throws IOException {
+        createOutputDocument(doc, annotTypesToWrite, output);
+    }
+
+    public static void createOutputDocument(Document doc, List<String> annotTypesToWrite, Path output) throws IOException {
         String docXMLString = null;
-        if(annotTypesToWrite.isEmpty()) {
+        if(!annotTypesToWrite.isEmpty()) {
             Set<Annotation> annotationsToWrite = new HashSet<>();
             AnnotationSet defaultAnnots = doc.getAnnotations();
             for (String s : annotTypesToWrite) {
@@ -95,19 +101,26 @@ public class AnnotationPipelinePrototype1 {
             }
             // Generate XML with the specified annotations, in this case, Lookup, Component, and Relation annotations
             docXMLString = doc.toXml(annotationsToWrite);
+            doc.getAnnotations().clear();
+            doc.getAnnotations().addAll(annotationsToWrite);
         }
         // Generate XML with all annotations. Ignored in the current main implementation
         else {
             docXMLString = doc.toXml();
         }
-        // Write output to file in home directory
-        File outputFile = new File(OUTPUT_FILE_NAME);
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-        OutputStreamWriter out;
-        out = new OutputStreamWriter(bos);
-        out.write(docXMLString);
-        out.close();
+
+        File outputFile = output == null ? new File(OUTPUT_FILE_NAME) : output.toFile();
+        GateXMLExporter exporter = new GateXMLExporter();
+        exporter.export(doc, outputFile);
+
+//        // Write output to file in home directory
+//        File outputFile = new File(OUTPUT_FILE_NAME);
+//        FileOutputStream fos = new FileOutputStream(outputFile);
+//        BufferedOutputStream bos = new BufferedOutputStream(fos);
+//        OutputStreamWriter out;
+//        out = new OutputStreamWriter(bos);
+//        out.write(docXMLString);
+//        out.close();
         LOG.debug("xml file created with specified annotations");
     }
 }
